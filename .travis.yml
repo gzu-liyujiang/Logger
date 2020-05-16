@@ -1,0 +1,12 @@
+# see https://docs.travis-ci.com/user/languages/android/
+language: android
+sudo: false
+jdk:
+  - oraclejdk8
+android:
+  components:
+    - build-tools-26.0.2
+    - android-26
+    - extra-android-m2repository
+script:
+  - ./gradlew assembleDebug
