@@ -1,10 +1,10 @@
 // See https://github.com/bintray/gradle-bintray-plugin
 //
 // 步骤一：打包到{USER_HOME}/.m2/repository
-// sh gradlew build publishToMavenLocal --info
+// ./gradlew build publishToMavenLocal --info
 //
 // 步骤二：上传到JFrog Bintray的Maven仓库，即jcenter
-// sh gradlew bintrayUpload --info
+// ./gradlew bintrayUpload --info
 
 //用于发布项目到maven仓库
 apply plugin: 'maven-publish'

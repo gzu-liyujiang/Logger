@@ -5,19 +5,18 @@
 Android 日志打印组件，面向接口编程  Logger
 
 ```groovy
-	allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
-	}
+    allprojects {
+        repositories {
+            maven { url 'https://jitpack.io' }
+        }
+    }
 ```
 ```groovy
-	dependencies {
-	        implementation 'com.github.gzu-liyujiang:Logger:latest.version'
-	}
+    dependencies {
+        implementation 'com.github.gzu-liyujiang:Logger:latest.version'
+    }
 ```
-```java
+```groovy
 Logger.ENABLE = BuildConfig.DEBUG;
 Logger.usePrinter(new BeautifulPrinter());
 Logger.print("测试");
