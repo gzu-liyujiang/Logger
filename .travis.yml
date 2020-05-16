@@ -5,8 +5,9 @@ jdk:
   - oraclejdk8
 android:
   components:
-    - build-tools-27.0.3
-    - android-27
+    - build-tools-28.0.3
+    - android-28
+    - extra-android-support
     - extra-android-m2repository
 script:
-  - ./gradlew assembleDebug
+  - ./gradlew assembleDebug --info
