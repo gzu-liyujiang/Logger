@@ -26,15 +26,20 @@ def pomDeveloperOrg = 'gzu-liyujiang'
 def pomDeveloperName = '李玉江'
 def pomDeveloperEmail = 'liyujiang_tk@yeah.net'
 
-// {PROJECT_ROOT}/local.properties
-Properties localProp = new Properties()
-localProp.load(project.rootProject.file('local.properties').newDataInputStream())
-// {USER_HOME}/.gradle/gradle.properties
-Map rootProp = project.getProperties()
-//Bintray用户信息
-def bintrayUserFromProperty = localProp.getProperty('bintray.user', rootProp.get('bintray.user', null))
-def bintrayApiKeyFromProperty = localProp.getProperty('bintray.apikey', rootProp.get('bintray.apikey', null))
-def propertyHasBintrayConfig = (bintrayUserFromProperty != null && bintrayApiKeyFromProperty != null)
+def bintrayUser = ''
+def bintrayApiKey = ''
+try {
+    // {PROJECT_ROOT}/local.properties
+    Properties localProp = new Properties()
+    localProp.load(project.rootProject.file('local.properties').newDataInputStream())
+    // {USER_HOME}/.gradle/gradle.properties
+    Map rootProp = project.getProperties()
+    //Bintray用户信息
+    bintrayUser = localProp.getProperty('bintray.user', rootProp.get('bintray.user', ''))
+    bintrayApiKey = localProp.getProperty('bintray.apikey', rootProp.get('bintray.apikey', ''))
+} catch (e) {
+    e.printStackTrace()
+}
 
 /**
  * generate xxx-classes.jar
@@ -141,8 +146,8 @@ publishing {
 
 bintray {
 
-    user = propertyHasBintrayConfig ? bintrayUserFromProperty : ""
-    key = propertyHasBintrayConfig ? bintrayApiKeyFromProperty : ""
+    user = bintrayUser
+    key = bintrayApiKey
 
     //对应前面的publishing.publications.mavenJava
     publications = ['MyPublication']
