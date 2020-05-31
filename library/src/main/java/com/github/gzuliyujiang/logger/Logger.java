@@ -30,7 +30,7 @@ import android.util.Log;
 public final class Logger {
     public static String TAG = "liyujiang";
     public static boolean ENABLE = false;
-    private static IPrinter printer = new SimplePrinter();
+    private static IPrinter printer = new BeautifulPrinter();
 
     private Logger() {
     }
