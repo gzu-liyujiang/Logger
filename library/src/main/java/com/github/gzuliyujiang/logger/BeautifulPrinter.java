@@ -10,10 +10,8 @@
  * PURPOSE.
  * See the Mulan PSL v1 for more details.
  */
-package com.github.gzuliyujiang.demo;
+package com.github.gzuliyujiang.logger;
 
-import com.github.gzuliyujiang.logger.IPrinter;
-import com.github.gzuliyujiang.logger.Logger;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.PrettyFormatStrategy;

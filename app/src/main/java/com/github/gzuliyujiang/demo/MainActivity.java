@@ -25,9 +25,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Logger.ENABLE = BuildConfig.DEBUG;
-        Logger.print("测试");
-        Logger.print(new RuntimeException("测试"));
-        Logger.usePrinter(new BeautifulPrinter());
+        //Logger.usePrinter(new BeautifulPrinter());
         Logger.print("测试");
         Logger.print(new RuntimeException("测试"));
     }

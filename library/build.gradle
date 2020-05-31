@@ -5,7 +5,7 @@ plugins {
 apply plugin: 'com.android.library'
 
 dependencies {
-
+    implementation 'com.orhanobut:logger:2.2.0'
 }
 
 android {
