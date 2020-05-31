@@ -19,8 +19,52 @@ Android 日志打印组件，面向接口编程  Logger
     }
 ```
 ```groovy
-Logger.ENABLE = BuildConfig.DEBUG;
-//Logger.usePrinter(new BeautifulPrinter());
-Logger.print("测试");
-Logger.print(new RuntimeException("测试"));
+        Logger.ENABLE = BuildConfig.DEBUG;
+        Logger.print("测试");
+        Logger.print(new RuntimeException("测试"));
+        Logger.usePrinter(new BeautifulPrinter());
+        Logger.print("测试");
+        Logger.print(new RuntimeException("测试"));
+```
+```text
+W/liyujiang: 测试
+W/liyujiang: java.lang.RuntimeException: 测试
+        at com.github.gzuliyujiang.demo.MainActivity.onCreate(MainActivity.java:29)
+        at android.app.Activity.performCreate(Activity.java:6324)
+        at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1108)
+        at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2447)
+        at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2556)
+        at android.app.ActivityThread.access$1200(ActivityThread.java:155)
+        at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1416)
+        at android.os.Handler.dispatchMessage(Handler.java:102)
+        at android.os.Looper.loop(Looper.java:148)
+        at android.app.ActivityThread.main(ActivityThread.java:5645)
+        at java.lang.reflect.Method.invoke(Native Method)
+        at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:726)
+        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:616)
+W/liyujiang: ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+W/liyujiang: │ Activity.performCreate  (Activity.java:6324)
+W/liyujiang: │    MainActivity.onCreate  (MainActivity.java:31)
+W/liyujiang: ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+W/liyujiang: │ 测试
+W/liyujiang: └────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+W/liyujiang: ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+W/liyujiang: │ Activity.performCreate  (Activity.java:6324)
+W/liyujiang: │    MainActivity.onCreate  (MainActivity.java:32)
+W/liyujiang: ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+W/liyujiang: │ java.lang.RuntimeException: 测试
+W/liyujiang: │ 	at com.github.gzuliyujiang.demo.MainActivity.onCreate(MainActivity.java:32)
+W/liyujiang: │ 	at android.app.Activity.performCreate(Activity.java:6324)
+W/liyujiang: │ 	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1108)
+W/liyujiang: │ 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2447)
+W/liyujiang: │ 	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2556)
+W/liyujiang: │ 	at android.app.ActivityThread.access$1200(ActivityThread.java:155)
+W/liyujiang: │ 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1416)
+W/liyujiang: │ 	at android.os.Handler.dispatchMessage(Handler.java:102)
+W/liyujiang: │ 	at android.os.Looper.loop(Looper.java:148)
+W/liyujiang: │ 	at android.app.ActivityThread.main(ActivityThread.java:5645)
+W/liyujiang: │ 	at java.lang.reflect.Method.invoke(Native Method)
+W/liyujiang: │ 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:726)
+W/liyujiang: │ 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:616)
+W/liyujiang: └────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ```

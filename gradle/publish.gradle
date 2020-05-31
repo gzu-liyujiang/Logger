@@ -2,31 +2,33 @@
 //
 // 步骤一：打包到{USER_HOME}/.m2/repository
 // ./gradlew build publishToMavenLocal --info
+// "./gradlew.bat" build publishToMavenLocal --info
 //
 // 步骤二：上传到JFrog Bintray的Maven仓库，即jcenter
 // ./gradlew bintrayUpload --info
+// "./gradlew.bat" bintrayUpload --info
 
-//用于发布项目到maven仓库
+//用于将打包项目发布到Jfrog Bintray的Maven仓库
 apply plugin: 'maven-publish'
-//用于上传项目到jcenter
 apply plugin: 'com.jfrog.bintray'
 
-//项目发布到Maven仓库的相关信息
+//项目相关信息
 def pomLibGroupName = 'com.github.gzuliyujiang'
-def pomLibArtifactId = 'Logger'
-def pomLibVersion = new Date().format("yyyy.MM.dd")
-def pomLibDescription = 'Log printer'
-def pomSiteUrl = 'https://github.com/liyujiang-gzu/'
-def pomGitUrl = 'https://github.com/gzu-liyujiang/Logger'
-def pomIssueUrl = 'https://github.com/gzu-liyujiang/Logger/issues'
+def pomLibArtifactId = rootProject.name
+def pomLibVersion = new Date().format("yyyy.M.d")
+def pomLibDescription = "TODO description: ${rootProject.name} for Android"
+def pomSiteUrl = "https://github.com/gzu-liyujiang/${rootProject.name}"
+def pomGitUrl = "https://github.com/gzu-liyujiang/${rootProject.name}.git"
+def pomIssueUrl = "https://github.com/gzu-liyujiang/${rootProject.name}/issues"
+def pomReleaseNotesUrl = "https://github.com/gzu-liyujiang/${rootProject.name}/README.md"
 def pomLicenses = ["MIT"]
 //开发者信息
 def pomDeveloperId = 'liyujiang-gzu'
 def pomDeveloperOrg = 'gzu-liyujiang'
 def pomDeveloperName = '李玉江'
-def pomDeveloperEmail = 'liyujiang_tk@yeah.net'
+def pomDeveloperEmail = '1032694760@qq.com'
 
-def bintrayUser = ''
+def bintrayUserName = ''
 def bintrayApiKey = ''
 try {
     // {PROJECT_ROOT}/local.properties
@@ -35,10 +37,11 @@ try {
     // {USER_HOME}/.gradle/gradle.properties
     Map rootProp = project.getProperties()
     //Bintray用户信息
-    bintrayUser = localProp.getProperty('bintray.user', rootProp.get('bintray.user', ''))
-    bintrayApiKey = localProp.getProperty('bintray.apikey', rootProp.get('bintray.apikey', ''))
-} catch (e) {
-    e.printStackTrace()
+    bintrayUserName = localProp.getProperty('bintrayUserName', rootProp.get('bintrayUserName', ''))
+    bintrayApiKey = localProp.getProperty('bintrayApiKey', rootProp.get('bintrayApiKey', ''))
+    println("bintray properties: user=$bintrayUserName apikey=$bintrayApiKey")
+} catch (ignore) {
+    System.err.println('read bintray user&apiKey failed')
 }
 
 /**
@@ -100,7 +103,7 @@ task sourcesJar(type: Jar) {
 
 publishing {
     publications {
-        MyPublication(MavenPublication) {
+        aarPublication(MavenPublication) {
             group = pomLibGroupName
             version = pomLibVersion
             description = pomLibDescription
@@ -146,11 +149,11 @@ publishing {
 
 bintray {
 
-    user = bintrayUser
+    user = bintrayUserName
     key = bintrayApiKey
 
     //对应前面的publishing.publications.mavenJava
-    publications = ['MyPublication']
+    publications = ['aarPublication']
     //[Default: false] Whether to run this as dry-run, without deploying
     dryRun = false
     //[Default: false] Whether version should be auto published after an upload
@@ -178,7 +181,7 @@ bintray {
         issueTrackerUrl = pomIssueUrl
         publicDownloadNumbers = true
         //Optional Github readme file
-        githubReleaseNotesFile = 'README.md'
+        githubReleaseNotesFile = pomReleaseNotesUrl
 
         //Optional version descriptor
         version {
@@ -195,16 +198,16 @@ bintray {
                 //Determines whether to GPG sign the files. The default is false
                 sign = false
                 //Optional. The passphrase for GPG signing
-                passphrase = 'passphrase'
+                //passphrase = 'passphrase'
             }
             //Optional configuration for Maven Central sync of the version
             mavenCentralSync {
                 //[Default: true] Determines whether to sync the version to Maven Central
                 sync = false
                 //OSS user token: mandatory
-                user = 'userToken'
+                //user = 'userToken'
                 //OSS user password: mandatory
-                password = 'paasword'
+                //password = 'paasword'
                 //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
                 close = '1'
             }
