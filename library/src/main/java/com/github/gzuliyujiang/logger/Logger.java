@@ -13,8 +13,8 @@
  */
 package com.github.gzuliyujiang.logger;
 
-import android.util.Log;
-
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +52,7 @@ public final class Logger {
     }
 
     /**
-     * @see SimplePrinter
+     * @see AndroidPrinter
      * @see BeautifulPrinter
      */
     public static void addPrinter(IPrinter iPrinter) {
@@ -76,13 +76,18 @@ public final class Logger {
         }
         if (PRINTERS.size() == 0) {
             //没有设置打印器，则使用默认的打印器
-            PRINTERS.add(new SimplePrinter());
+            try {
+                Class.forName("android.util.Log");
+                PRINTERS.add(new AndroidPrinter());
+            } catch (ClassNotFoundException e) {
+                PRINTERS.add(new JavaPrinter());
+            }
         }
         String str;
         if (object == null) {
             str = "NULL";
         } else if (object instanceof Throwable) {
-            str = Log.getStackTraceString((Throwable) object);
+            str = getStackTraceString((Throwable) object);
         } else {
             str = object.toString();
         }
@@ -91,5 +96,22 @@ public final class Logger {
         }
     }
 
+    /**
+     * Adapted from android.util.Log#getStackTraceString
+     */
+    public static String getStackTraceString(Throwable tr) {
+        if (tr == null) {
+            return "";
+        }
+        Throwable t = tr;
+        while (t != null) {
+            t = t.getCause();
+        }
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        tr.printStackTrace(pw);
+        pw.flush();
+        return sw.toString();
+    }
 
 }

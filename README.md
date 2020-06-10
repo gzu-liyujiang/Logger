@@ -4,7 +4,7 @@
 [![jitpack](https://jitpack.io/v/gzu-liyujiang/Logger.svg)](https://jitpack.io/#gzu-liyujiang/Logger)
 [![travis-ci](https://travis-ci.org/gzu-liyujiang/Logger.svg?branch=master)](https://travis-ci.org/gzu-liyujiang/Logger)
 
-Android 日志打印组件，面向接口编程  Logger
+自用的 Android/Java 日志打印组件，面向接口编程，默认实现了android.util.Log、System.out.println及https://github.com/orhanobut/logger
 
 ```groovy
     allprojects {

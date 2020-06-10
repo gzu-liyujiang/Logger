@@ -13,18 +13,16 @@
  */
 package com.github.gzuliyujiang.logger;
 
-import android.util.Log;
-
 /**
- * 默认的日志打印器
+ * Java平台通用的日志打印器
  *
  * @author 大定府羡民
  */
-class SimplePrinter implements IPrinter {
+class JavaPrinter implements IPrinter {
 
     @Override
     public void printLog(String log) {
-        Log.w(Logger.TAG, log);
+        System.out.println("[" + Logger.TAG + "]" + log);
     }
 
 }
