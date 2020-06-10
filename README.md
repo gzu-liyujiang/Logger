@@ -19,35 +19,49 @@ Android 日志打印组件，面向接口编程  Logger
     }
 ```
 ```groovy
+    static {
         Logger.ENABLE = BuildConfig.DEBUG;
-        //Logger.usePrinter(new BeautifulPrinter());
-        Logger.print("测试");
+        Logger.TAG = Logger.TAG + "-" + MainActivity.class.getSimpleName();
+    }
+
+        // 没有设置打印器，默认使用android.util.Log
+        Logger.print("测试1");
+        // 添加一个打印器，需添加依赖（runtimeOnly 'com.orhanobut:logger:2.2.0'）
+        Logger.addPrinter(new BeautifulPrinter());
+        Logger.print("测试2");
+        Logger.addPrinter(new IPrinter() {
+            @Override
+            public void printLog(String log) {
+                System.out.println("诸如，可以将日志保存到文件：" + log);
+            }
+        });
+        Logger.print("测试3");
         Logger.print(new RuntimeException("测试"));
 ```
 ```text
-W/liyujiang: ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-W/liyujiang: │ Activity.performCreate  (Activity.java:6324)
-W/liyujiang: │    MainActivity.onCreate  (MainActivity.java:31)
-W/liyujiang: ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
-W/liyujiang: │ 测试
-W/liyujiang: └────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-W/liyujiang: ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-W/liyujiang: │ Activity.performCreate  (Activity.java:6324)
-W/liyujiang: │    MainActivity.onCreate  (MainActivity.java:32)
-W/liyujiang: ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
-W/liyujiang: │ java.lang.RuntimeException: 测试
-W/liyujiang: │ 	at com.github.gzuliyujiang.demo.MainActivity.onCreate(MainActivity.java:32)
-W/liyujiang: │ 	at android.app.Activity.performCreate(Activity.java:6324)
-W/liyujiang: │ 	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1108)
-W/liyujiang: │ 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2447)
-W/liyujiang: │ 	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2556)
-W/liyujiang: │ 	at android.app.ActivityThread.access$1200(ActivityThread.java:155)
-W/liyujiang: │ 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1416)
-W/liyujiang: │ 	at android.os.Handler.dispatchMessage(Handler.java:102)
-W/liyujiang: │ 	at android.os.Looper.loop(Looper.java:148)
-W/liyujiang: │ 	at android.app.ActivityThread.main(ActivityThread.java:5645)
-W/liyujiang: │ 	at java.lang.reflect.Method.invoke(Native Method)
-W/liyujiang: │ 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:726)
-W/liyujiang: │ 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:616)
-W/liyujiang: └────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+W/liyujiang-MainActivity: 测试1
+W/liyujiang-MainActivity: ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+W/liyujiang-MainActivity: │ Activity.performCreate  (Activity.java:7868)
+W/liyujiang-MainActivity: │    MainActivity.onCreate  (MainActivity.java:38)
+W/liyujiang-MainActivity: ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+W/liyujiang-MainActivity: │ 测试2
+W/liyujiang-MainActivity: └────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+I/System.out: 诸如，可以将日志保存到文件：测试3
+I/System.out: 诸如，可以将日志保存到文件：java.lang.RuntimeException: 测试
+I/System.out:     at com.github.gzuliyujiang.demo.MainActivity.onCreate(MainActivity.java:46)
+I/System.out:     at android.app.Activity.performCreate(Activity.java:7868)
+I/System.out:     at android.app.Activity.performCreate(Activity.java:7857)
+I/System.out:     at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1353)
+I/System.out:     at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:3479)
+I/System.out:     at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:3643)
+I/System.out:     at android.app.servertransaction.LaunchActivityItem.execute(LaunchActivityItem.java:83)
+I/System.out:     at android.app.servertransaction.TransactionExecutor.executeCallbacks(TransactionExecutor.java:135)
+I/System.out:     at android.app.servertransaction.TransactionExecutor.execute(TransactionExecutor.java:95)
+I/System.out:     at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2225)
+I/System.out:     at android.os.Handler.dispatchMessage(Handler.java:107)
+I/System.out:     at android.os.Looper.loop(Looper.java:230)
+I/System.out:     at android.app.ActivityThread.main(ActivityThread.java:7742)
+I/System.out:     at java.lang.reflect.Method.invoke(Native Method)
+I/System.out:     at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:508)
+I/System.out:     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1034)
 ```

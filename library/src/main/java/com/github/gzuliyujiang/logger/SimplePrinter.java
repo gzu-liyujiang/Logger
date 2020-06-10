@@ -9,6 +9,7 @@
  * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
  * PURPOSE.
  * See the Mulan PSL v1 for more details.
+ *
  */
 package com.github.gzuliyujiang.logger;
 
@@ -19,7 +20,7 @@ import android.util.Log;
  *
  * @author 大定府羡民
  */
-public class SimplePrinter implements IPrinter {
+class SimplePrinter implements IPrinter {
 
     @Override
     public void printLog(String log) {

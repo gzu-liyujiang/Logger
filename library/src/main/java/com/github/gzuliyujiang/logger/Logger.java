@@ -9,10 +9,14 @@
  * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
  * PURPOSE.
  * See the Mulan PSL v1 for more details.
+ *
  */
 package com.github.gzuliyujiang.logger;
 
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <pre>
@@ -30,19 +34,37 @@ import android.util.Log;
 public final class Logger {
     public static String TAG = "liyujiang";
     public static boolean ENABLE = false;
-    private static IPrinter printer = new BeautifulPrinter();
+    private static final List<IPrinter> PRINTERS = new ArrayList<>();
 
     private Logger() {
     }
 
     /**
-     * @see SimplePrinter
+     * Use {@link #addPrinter(IPrinter)} instead
      */
+    @Deprecated
     public static void usePrinter(IPrinter iPrinter) {
         if (iPrinter == null) {
             return;
         }
-        printer = iPrinter;
+        PRINTERS.clear();
+        PRINTERS.add(iPrinter);
+    }
+
+    /**
+     * @see SimplePrinter
+     * @see BeautifulPrinter
+     */
+    public static void addPrinter(IPrinter iPrinter) {
+        if (iPrinter == null) {
+            return;
+        }
+        PRINTERS.clear();
+        PRINTERS.add(iPrinter);
+    }
+
+    public static List<IPrinter> getPrinters() {
+        return PRINTERS;
     }
 
     /**
@@ -52,17 +74,21 @@ public final class Logger {
         if (!ENABLE) {
             return;
         }
-        if (object == null) {
-            printer.printLog("NULL");
-            return;
+        if (PRINTERS.size() == 0) {
+            //没有设置打印器，则使用默认的打印器
+            PRINTERS.add(new SimplePrinter());
         }
         String str;
-        if (object instanceof Throwable) {
+        if (object == null) {
+            str = "NULL";
+        } else if (object instanceof Throwable) {
             str = Log.getStackTraceString((Throwable) object);
         } else {
             str = object.toString();
         }
-        printer.printLog(str);
+        for (IPrinter printer : PRINTERS) {
+            printer.printLog(str);
+        }
     }
 
 
