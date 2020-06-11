@@ -1,5 +1,4 @@
 // 参见 https://github.com/shwenzhang/AndResGuard
-
 apply plugin: 'AndResGuard'
 
 andResGuard {

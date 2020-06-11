@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply from: "${rootDir}/gradle/common.gradle"
+apply from: "${rootDir}/gradle/resguard.gradle"
 
 dependencies {
     implementation project(":library")
@@ -139,7 +141,7 @@ android.applicationVariants.all { variant ->
     //APK构建完成后，备份release版本到指定目录
     tasks.all { it ->
         def maybeNeedCopy
-        if (appResGuardEnable.toString().equalsIgnoreCase("true") && it.name.startsWith("resguard")) {
+        if (it.name.startsWith("resguard")) {
             maybeNeedCopy = true
         } else {
             maybeNeedCopy = it.name.startsWith("assemble");
