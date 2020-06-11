@@ -7,24 +7,6 @@ dependencies {
     runtimeOnly 'com.orhanobut:logger:2.2.0'
 }
 
-def hasSigningFile = false
-def signingStorePath
-def signingStorePassword
-def signingKeyAlias
-def signingKeyPassword
-try {
-    // {USER_HOME}/.gradle/gradle.properties
-    Map rootProp = project.getProperties()
-    signingStorePath = rootProp.get('signingStorePath', '')
-    signingStorePassword = rootProp.get('signingStorePassword', '')
-    signingKeyAlias = rootProp.get('signingKeyAlias', '')
-    signingKeyPassword = rootProp.get('signingKeyPassword', '')
-    println("signing store file: $signingStoreFile, alias: $signingKeyAlias, password: $signingStorePassword")
-    hasSigningFile = true
-} catch (ignore) {
-    System.err.println('read signing properties failed')
-}
-
 android {
 
     splits {
@@ -46,12 +28,43 @@ android {
         signingConfigs {
             //直接使用真实的密钥库文件，避免微信、高德地图等第三方SDK校验失败
             releaseConfig {
-                storeFile new File(signingStorePath)
-                storePassword signingStorePassword
-                keyAlias signingKeyAlias
-                keyPassword signingKeyPassword
-                v1SigningEnabled true
-                v2SigningEnabled true
+                try {
+                    // {rootProject}/gradle.properties 或  {USER_HOME}/.gradle/gradle.properties
+                    Map rootProp = project.getProperties()
+                    def signingStorePath = rootProp.get('signingStorePath', '')
+                    if (signingStorePath == '') {
+                        throw new Exception('signing store path is empty from global gradle.properties')
+                    }
+                    println("[signing] store file: $signingStorePath")
+                    def signingStorePassword = rootProp.get('signingStorePassword', '')
+                    println("[signing] store password: $signingStorePassword")
+                    def signingKeyAlias = rootProp.get('signingKeyAlias', '')
+                    println("[signing] key alias: $signingKeyAlias")
+                    def signingKeyPassword = rootProp.get('signingKeyPassword', '')
+                    println("[signing] key password: $signingKeyPassword")
+                    storeFile new File(signingStorePath)
+                    storePassword signingStorePassword
+                    keyAlias signingKeyAlias
+                    keyPassword signingKeyPassword
+                    v1SigningEnabled true
+                    v2SigningEnabled true
+                } catch (e) {
+                    System.err.println('[signing] read failed from properties: ' + e.getMessage())
+                    def signingStorePath = project.rootProject.file('app/debug.keystore').getAbsolutePath()
+                    println("[signing] store file: $signingStorePath")
+                    def signingStorePassword = 'android'
+                    println("[signing] store password: $signingStorePassword")
+                    def signingKeyAlias = 'androiddebugkey'
+                    println("[signing] key alias: $signingKeyAlias")
+                    def signingKeyPassword = 'android'
+                    println("[signing] key password: $signingKeyPassword")
+                    storeFile new File(signingStorePath)
+                    storePassword signingStorePassword
+                    keyAlias signingKeyAlias
+                    keyPassword signingKeyPassword
+                    v1SigningEnabled true
+                    v2SigningEnabled true
+                }
             }
         }
         manifestPlaceholders = [
@@ -79,9 +92,7 @@ android {
             minifyEnabled true
             //混淆配置文件
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-common.pro', 'proguard-rules.pro'
-            if (hasSigningFile) {
-                signingConfig signingConfigs.releaseConfig
-            }
+            signingConfig signingConfigs.releaseConfig
         }
         //调试版本
         debug {
@@ -90,9 +101,7 @@ android {
             zipAlignEnabled true
             shrinkResources false
             minifyEnabled false
-            if (hasSigningFile) {
-                signingConfig signingConfigs.releaseConfig
-            }
+            signingConfig signingConfigs.releaseConfig
         }
     }
 
