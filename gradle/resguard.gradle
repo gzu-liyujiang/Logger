@@ -9,7 +9,7 @@ andResGuard {
     metaName = "META-INF"
     fixedResName = null
     // it will keep the origin path of your resources when it's true
-    keepRoot = true
+    keepRoot = false
     // It will merge the duplicated resources, but don't rely on this feature too much.
     // it's always better to remove duplicated resource from repo
     mergeDuplicatedRes = true
