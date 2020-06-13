@@ -32,56 +32,54 @@ import java.util.List;
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public final class Logger {
-    public static String TAG = "liyujiang";
-    public static boolean ENABLE = false;
-    private static final List<IPrinter> PRINTERS = new ArrayList<>();
+    public static final String TAG = "liyujiang";
+    private static boolean logEnable = false;
+    private static IPrinter mainPrinter;
+    private static List<IPrinter> otherPrinters = new ArrayList<>();
 
     private Logger() {
+        super();
+    }
+
+    public static void useDefaultPrinter() {
+        useDefaultPrinter(null);
+    }
+
+    public static void useDefaultPrinter(String tag) {
+        if (tag == null || tag.trim().length() == 0) {
+            tag = TAG;
+        }
+        logEnable = true;
+        mainPrinter = new DefaultPrinter(tag);
     }
 
     /**
-     * Use {@link #addPrinter(IPrinter)} instead
+     * @see DefaultPrinter
      */
-    @Deprecated
     public static void usePrinter(IPrinter iPrinter) {
         if (iPrinter == null) {
             return;
         }
-        PRINTERS.clear();
-        PRINTERS.add(iPrinter);
+        mainPrinter = iPrinter;
     }
 
-    /**
-     * @see AndroidPrinter
-     * @see BeautifulPrinter
-     */
-    public static void addPrinter(IPrinter iPrinter) {
-        if (iPrinter == null) {
+    public static void addOtherPrinter(IPrinter iPrinter) {
+        if (iPrinter == null || otherPrinters.contains(iPrinter)) {
             return;
         }
-        PRINTERS.clear();
-        PRINTERS.add(iPrinter);
+        otherPrinters.add(iPrinter);
     }
 
-    public static List<IPrinter> getPrinters() {
-        return PRINTERS;
+    public static void clearOtherPrinters() {
+        otherPrinters.clear();
     }
 
     /**
      * 打印调试日志，用于开发阶段
      */
-    public static void print(Object object) {
-        if (!ENABLE) {
+    public static synchronized void print(Object object) {
+        if (!logEnable) {
             return;
-        }
-        if (PRINTERS.size() == 0) {
-            //没有设置打印器，则使用默认的打印器
-            try {
-                Class.forName("android.util.Log");
-                PRINTERS.add(new AndroidPrinter());
-            } catch (ClassNotFoundException e) {
-                PRINTERS.add(new JavaPrinter());
-            }
         }
         String str;
         if (object == null) {
@@ -91,7 +89,8 @@ public final class Logger {
         } else {
             str = object.toString();
         }
-        for (IPrinter printer : PRINTERS) {
+        mainPrinter.printLog(str);
+        for (IPrinter printer : otherPrinters) {
             printer.printLog(str);
         }
     }
