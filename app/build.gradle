@@ -93,7 +93,7 @@ android {
             //是否混淆
             minifyEnabled true
             //混淆配置文件
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-common.pro', 'proguard-rules.pro'
+            proguardFiles 'proguard-common.pro', 'proguard-rules.pro'
             signingConfig signingConfigs.releaseConfig
         }
         //调试版本
@@ -132,7 +132,7 @@ android.applicationVariants.all { variant ->
         if (outputFileName != null && outputFileName.endsWith(".apk")) {
             def versionCode = android.defaultConfig.versionCode
             def versionName = android.defaultConfig.versionName
-            String fileName = "${outputFile.name.replace('-release.apk', '')}-v${versionName}-built${versionCode}.apk"
+            String fileName = "${outputFile.name.replace('-release.apk', '')}-v${versionName}.apk"
             //这里只能用相对路径，不然报错
             outputFileName = new File(fileName)
             println "outputFile=$outputFile"
