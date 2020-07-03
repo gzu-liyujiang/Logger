@@ -17,6 +17,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * <pre>
@@ -33,6 +34,7 @@ import java.util.List;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public final class Logger {
     public static final String TAG = "liyujiang";
+    public static final String LINE_SEPARATOR = System.getProperty("line.separator");
     private static boolean logEnable = false;
     private static IPrinter mainPrinter;
     private static List<IPrinter> otherPrinters = new ArrayList<>();
@@ -41,16 +43,32 @@ public final class Logger {
         super();
     }
 
-    public static void useDefaultPrinter() {
-        useDefaultPrinter(null);
+    public static void enableDefaultPrinter() {
+        enableDefaultPrinter(null);
     }
 
-    public static void useDefaultPrinter(String tag) {
+    /**
+     * @deprecated Use {@link #enableDefaultPrinter()} instead
+     */
+    @Deprecated
+    public static void useDefaultPrinter() {
+        enableDefaultPrinter();
+    }
+
+    public static void enableDefaultPrinter(String tag) {
         if (tag == null || tag.trim().length() == 0) {
             tag = TAG;
         }
         logEnable = true;
         mainPrinter = new DefaultPrinter(tag);
+    }
+
+    /**
+     * @deprecated Use {@link #enableDefaultPrinter()} instead
+     */
+    @Deprecated
+    public static void useDefaultPrinter(String tag) {
+        enableDefaultPrinter(tag);
     }
 
     /**
@@ -96,21 +114,74 @@ public final class Logger {
     }
 
     /**
-     * Adapted from android.util.Log#getStackTraceString
+     * Adapted from {@code com.blankj.utilcode.util.ThrowableUtils#getFullStackTrace},
+     * like {@link android.util.Log#getStackTraceString}
      */
-    public static String getStackTraceString(Throwable tr) {
-        if (tr == null) {
-            return "";
+    public static String getStackTraceString(Throwable throwable) {
+        final List<Throwable> throwableList = new ArrayList<>();
+        while (throwable != null && !throwableList.contains(throwable)) {
+            throwableList.add(throwable);
+            throwable = throwable.getCause();
         }
-        Throwable t = tr;
-        while (t != null) {
-            t = t.getCause();
+        final int size = throwableList.size();
+        final List<String> frames = new ArrayList<>();
+        List<String> nextTrace = getStackFrameList(throwableList.get(size - 1));
+        for (int i = size; --i >= 0; ) {
+            final List<String> trace = nextTrace;
+            if (i != 0) {
+                nextTrace = getStackFrameList(throwableList.get(i - 1));
+                removeCommonFrames(trace, nextTrace);
+            }
+            if (i == size - 1) {
+                frames.add(throwableList.get(i).toString());
+            } else {
+                frames.add(" Caused by: " + throwableList.get(i).toString());
+            }
+            frames.addAll(trace);
         }
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        tr.printStackTrace(pw);
-        pw.flush();
-        return sw.toString();
+        StringBuilder sb = new StringBuilder();
+        for (final String element : frames) {
+            sb.append(element).append(LINE_SEPARATOR);
+        }
+        return sb.toString();
+    }
+
+    private static List<String> getStackFrameList(final Throwable throwable) {
+        final StringWriter sw = new StringWriter();
+        final PrintWriter pw = new PrintWriter(sw, true);
+        throwable.printStackTrace(pw);
+        final String stackTrace = sw.toString();
+        final StringTokenizer frames = new StringTokenizer(stackTrace, LINE_SEPARATOR);
+        final List<String> list = new ArrayList<>();
+        boolean traceStarted = false;
+        while (frames.hasMoreTokens()) {
+            final String token = frames.nextToken();
+            // Determine if the line starts with <whitespace>at
+            final int at = token.indexOf("at");
+            if (at != -1 && token.substring(0, at).trim().isEmpty()) {
+                traceStarted = true;
+                list.add(token);
+            } else if (traceStarted) {
+                break;
+            }
+        }
+        return list;
+    }
+
+    private static void removeCommonFrames(final List<String> causeFrames, final List<String> wrapperFrames) {
+        int causeFrameIndex = causeFrames.size() - 1;
+        int wrapperFrameIndex = wrapperFrames.size() - 1;
+        while (causeFrameIndex >= 0 && wrapperFrameIndex >= 0) {
+            // Remove the frame from the cause trace if it is the same
+            // as in the wrapper trace
+            final String causeFrame = causeFrames.get(causeFrameIndex);
+            final String wrapperFrame = wrapperFrames.get(wrapperFrameIndex);
+            if (causeFrame.equals(wrapperFrame)) {
+                causeFrames.remove(causeFrameIndex);
+            }
+            causeFrameIndex--;
+            wrapperFrameIndex--;
+        }
     }
 
 }

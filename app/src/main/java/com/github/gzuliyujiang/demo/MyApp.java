@@ -27,7 +27,7 @@ public class MyApp extends Application {
 
     static {
         // 若使用打印器，需添加依赖（runtimeOnly 'com.orhanobut:logger:2.2.0'）
-        Logger.useDefaultPrinter();
+        Logger.enableDefaultPrinter();
         //Logger.usePrinter(log -> System.out.println("替待默认的打印器：" + log));
         Logger.addOtherPrinter(log -> System.out.println("诸如，可以将日志保存到文件：" + log));
     }
