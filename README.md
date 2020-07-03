@@ -1,8 +1,10 @@
 # Logger
+
 [![API 14+](https://img.shields.io/badge/API-14%2B-green.svg)](https://github.com/gzu-liyujiang/Logger)
 [![bintray](https://api.bintray.com/packages/gzu-liyujiang/maven/Logger/images/download.svg) ](https://bintray.com/gzu-liyujiang/maven/Logger/_latestVersion)
 [![jitpack](https://jitpack.io/v/gzu-liyujiang/Logger.svg)](https://jitpack.io/#gzu-liyujiang/Logger)
-[![travis-ci](https://travis-ci.org/gzu-liyujiang/Logger.svg?branch=master)](https://travis-ci.org/gzu-liyujiang/Logger)
+![Release APK](https://github.com/gzu-liyujiang/Logger/workflows/Release%20APK/badge.svg)
+![Gradle Package](https://github.com/gzu-liyujiang/Logger/workflows/Gradle%20Package/badge.svg)
 
 自用的 Android/Java 日志打印组件，面向接口编程，默认实现了android.util.Log、System.out.println及https://github.com/orhanobut/logger
 

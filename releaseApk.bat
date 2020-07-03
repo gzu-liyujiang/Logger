@@ -1,6 +1,5 @@
 @echo build release apk
 cd /d .
-@REM "./gradlew.bat" clean cleanBuildCache assembleRelease --info --warning-mode all
-"./gradlew.bat" clean cleanBuildCache resguardRelease --info --warning-mode all
+@REM gradlew clean assembleRelease --warning-mode all
+gradlew clean resguardRelease --warning-mode all
 pause
-
