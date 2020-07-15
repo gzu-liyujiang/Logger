@@ -18,6 +18,7 @@
 ```groovy
     dependencies {
         implementation 'com.github.gzu-liyujiang:Logger:latest.version'
+        debugRuntimeOnly 'com.orhanobut:logger:2.2.0'
     }
 ```
 
