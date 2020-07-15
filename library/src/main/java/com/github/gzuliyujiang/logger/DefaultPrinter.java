@@ -23,7 +23,7 @@ import com.orhanobut.logger.PrettyFormatStrategy;
  *
  * @author 大定府羡民
  */
-public class DefaultPrinter implements IPrinter {
+class DefaultPrinter implements IPrinter {
     private String tag;
 
     public DefaultPrinter(String tag) {

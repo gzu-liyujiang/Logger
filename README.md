@@ -1,12 +1,11 @@
 # Logger
 
-[![API 14+](https://img.shields.io/badge/API-14%2B-green.svg)](https://github.com/gzu-liyujiang/Logger)
-[![bintray](https://api.bintray.com/packages/gzu-liyujiang/maven/Logger/images/download.svg) ](https://bintray.com/gzu-liyujiang/maven/Logger/_latestVersion)
-[![jitpack](https://jitpack.io/v/gzu-liyujiang/Logger.svg)](https://jitpack.io/#gzu-liyujiang/Logger)
 ![Release APK](https://github.com/gzu-liyujiang/Logger/workflows/Release%20APK/badge.svg)
 ![Gradle Package](https://github.com/gzu-liyujiang/Logger/workflows/Gradle%20Package/badge.svg)
+[![jitpack](https://jitpack.io/v/gzu-liyujiang/Logger.svg)](https://jitpack.io/#gzu-liyujiang/Logger)
 
 自用的 Android/Java 日志打印组件，面向接口编程，默认实现了android.util.Log、System.out.println及https://github.com/orhanobut/logger
+
 
 ```groovy
     allprojects {
@@ -15,12 +14,14 @@
         }
     }
 ```
+
 ```groovy
     dependencies {
         implementation 'com.github.gzu-liyujiang:Logger:latest.version'
     }
 ```
-```groovy
+
+```java
 public class MyApp extends Application {
 
     static {
@@ -39,10 +40,12 @@ public class MyApp extends Application {
 }
 
 ```
-```groovy
+
+```java
         Logger.print("测试1");
         Logger.print(new RuntimeException("测试2"));
 ```
+
 ```text
 W/liyujiang: ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 W/liyujiang: │ Instrumentation.callApplicationOnCreate  (Instrumentation.java:1236)

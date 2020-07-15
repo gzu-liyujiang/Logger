@@ -1,3 +1,2 @@
-rootProject.name='Logger'
-include ':app'
 include ':library'
+include ':app'
