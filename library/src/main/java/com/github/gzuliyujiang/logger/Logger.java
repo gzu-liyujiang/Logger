@@ -73,8 +73,13 @@ public final class Logger {
     }
 
     public static void addOtherPrinter(IPrinter iPrinter) {
-        if (iPrinter == null || otherPrinters.contains(iPrinter)) {
+        if (iPrinter == null) {
             return;
+        }
+        for (IPrinter printer : otherPrinters) {
+            if (printer.getClass().getName().equals(iPrinter.getClass().getName())) {
+                return;
+            }
         }
         otherPrinters.add(iPrinter);
     }
