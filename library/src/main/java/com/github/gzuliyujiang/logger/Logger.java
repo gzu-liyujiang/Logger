@@ -35,50 +35,41 @@ import java.util.StringTokenizer;
 public final class Logger {
     public static final String TAG = "liyujiang";
     public static final String LINE_SEPARATOR = System.getProperty("line.separator");
-    private static boolean logEnable = false;
-    private static IPrinter mainPrinter;
+    private static IPrinter mainPrinter = null;
     private static List<IPrinter> otherPrinters = new ArrayList<>();
 
     private Logger() {
         super();
     }
 
-    public static void enableDefaultPrinter() {
-        enableDefaultPrinter(null);
+    public static void disableAllPrinter() {
+        disableMainPrinter();
+        disableOtherPrinter();
     }
 
-    /**
-     * @deprecated Use {@link #enableDefaultPrinter()} instead
-     */
-    @Deprecated
-    public static void useDefaultPrinter() {
-        enableDefaultPrinter();
+    public static void enableMainPrinter() {
+        enableMainPrinter(null);
     }
 
-    public static void enableDefaultPrinter(String tag) {
+    public static void enableMainPrinter(String tag) {
         if (tag == null || tag.trim().length() == 0) {
             tag = TAG;
         }
-        logEnable = true;
         mainPrinter = new DefaultPrinter(tag);
-    }
-
-    /**
-     * @deprecated Use {@link #enableDefaultPrinter()} instead
-     */
-    @Deprecated
-    public static void useDefaultPrinter(String tag) {
-        enableDefaultPrinter(tag);
     }
 
     /**
      * @see DefaultPrinter
      */
-    public static void usePrinter(IPrinter iPrinter) {
+    public static void setMainPrinter(IPrinter iPrinter) {
         if (iPrinter == null) {
             return;
         }
         mainPrinter = iPrinter;
+    }
+
+    public static void disableMainPrinter() {
+        mainPrinter = null;
     }
 
     public static void addOtherPrinter(IPrinter iPrinter) {
@@ -88,7 +79,7 @@ public final class Logger {
         otherPrinters.add(iPrinter);
     }
 
-    public static void clearOtherPrinters() {
+    public static void disableOtherPrinter() {
         otherPrinters.clear();
     }
 
@@ -96,9 +87,18 @@ public final class Logger {
      * 打印调试日志，用于开发阶段
      */
     public static synchronized void print(Object object) {
-        if (!logEnable) {
-            return;
+        if (mainPrinter != null) {
+            mainPrinter.printLog(formatLog(object));
         }
+        if (otherPrinters.size() > 0) {
+            String log = formatLog(object);
+            for (IPrinter printer : otherPrinters) {
+                printer.printLog(log);
+            }
+        }
+    }
+
+    private static String formatLog(Object object) {
         String str;
         if (object == null) {
             str = "NULL";
@@ -107,10 +107,7 @@ public final class Logger {
         } else {
             str = object.toString();
         }
-        mainPrinter.printLog(str);
-        for (IPrinter printer : otherPrinters) {
-            printer.printLog(str);
-        }
+        return str;
     }
 
     /**
