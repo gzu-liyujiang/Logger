@@ -31,47 +31,79 @@ import java.util.StringTokenizer;
  *
  * @author 大定府羡民
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({"WeakerAccess"})
 public final class Logger {
     public static final String TAG = "liyujiang";
     public static final String LINE_SEPARATOR = System.getProperty("line.separator");
-    private static IPrinter mainPrinter = null;
-    private static List<IPrinter> otherPrinters = new ArrayList<>();
+    private static IPrinter consolePrinter = null;
+    private static final List<IPrinter> otherPrinters = new ArrayList<>();
 
     private Logger() {
         super();
     }
 
+    /**
+     * 禁用所有的日志打印器
+     */
     public static void disableAllPrinter() {
-        disableMainPrinter();
+        disableConsolePrinter();
         disableOtherPrinter();
     }
 
-    public static void enableMainPrinter() {
-        enableMainPrinter(null);
-    }
-
-    public static void enableMainPrinter(String tag) {
+    /**
+     * 启用控制台日志打印器，日志会显示在开发者工具的日志窗口
+     */
+    public static void enableConsolePrinter(String tag) {
         if (tag == null || tag.trim().length() == 0) {
             tag = TAG;
         }
-        mainPrinter = new DefaultPrinter(tag);
+        consolePrinter = new ConsolePrinter(tag);
+    }
+
+    public static void enableConsolePrinter() {
+        enableConsolePrinter(null);
+    }
+
+    @Deprecated
+    public static void enableMainPrinter() {
+        enableConsolePrinter();
+    }
+
+    @Deprecated
+    public static void enableMainPrinter(String tag) {
+        enableConsolePrinter(tag);
     }
 
     /**
-     * @see DefaultPrinter
+     * @see ConsolePrinter
      */
-    public static void setMainPrinter(IPrinter iPrinter) {
+    public static void setConsolePrinter(IPrinter iPrinter) {
         if (iPrinter == null) {
             return;
         }
-        mainPrinter = iPrinter;
+        consolePrinter = iPrinter;
     }
 
+    @Deprecated
+    public static void setMainPrinter(IPrinter iPrinter) {
+        setConsolePrinter(iPrinter);
+    }
+
+    /**
+     * 禁用控制台日志打印器
+     */
+    public static void disableConsolePrinter() {
+        consolePrinter = null;
+    }
+
+    @Deprecated
     public static void disableMainPrinter() {
-        mainPrinter = null;
+        disableConsolePrinter();
     }
 
+    /**
+     * 添加其他日志打印器，如日志记录到本地文件
+     */
     public static void addOtherPrinter(IPrinter iPrinter) {
         if (iPrinter == null) {
             return;
@@ -84,6 +116,9 @@ public final class Logger {
         otherPrinters.add(iPrinter);
     }
 
+    /**
+     * 禁用除控制台日志打印器之外的所有日志打印器
+     */
     public static void disableOtherPrinter() {
         otherPrinters.clear();
     }
@@ -92,8 +127,8 @@ public final class Logger {
      * 打印调试日志，用于开发阶段
      */
     public static synchronized void print(Object object) {
-        if (mainPrinter != null) {
-            mainPrinter.printLog(formatLog(object));
+        if (consolePrinter != null) {
+            consolePrinter.printLog(formatLog(object));
         }
         if (otherPrinters.size() > 0) {
             String log = formatLog(object);
@@ -101,6 +136,13 @@ public final class Logger {
                 printer.printLog(log);
             }
         }
+    }
+
+    /**
+     * 打印调试日志，用于开发阶段
+     */
+    public static synchronized void print(String format, Object... args) {
+        print(String.format(format, args));
     }
 
     private static String formatLog(Object object) {

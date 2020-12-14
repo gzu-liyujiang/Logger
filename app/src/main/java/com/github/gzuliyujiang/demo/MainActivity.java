@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Logger.print("测试1");
         Logger.print(new RuntimeException("测试2"));
+        Logger.print("当前类：%s", getClass().getName());
     }
 
 }

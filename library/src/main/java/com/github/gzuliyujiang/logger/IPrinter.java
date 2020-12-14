@@ -9,6 +9,7 @@
  * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
  * PURPOSE.
  * See the Mulan PSL v1 for more details.
+ *
  */
 package com.github.gzuliyujiang.logger;
 
@@ -18,6 +19,7 @@ package com.github.gzuliyujiang.logger;
  * @author 大定府羡民
  */
 public interface IPrinter {
+
     /**
      * 将调试日志打印到控制台，一般用于开发阶段
      */

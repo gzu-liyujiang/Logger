@@ -23,10 +23,10 @@ import com.orhanobut.logger.PrettyFormatStrategy;
  *
  * @author 大定府羡民
  */
-class DefaultPrinter implements IPrinter {
-    private String tag;
+class ConsolePrinter implements IPrinter {
+    private final String tag;
 
-    public DefaultPrinter(String tag) {
+    public ConsolePrinter(String tag) {
         this.tag = tag;
         try {
             FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()

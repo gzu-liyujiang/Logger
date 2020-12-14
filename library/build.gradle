@@ -1,16 +1,6 @@
-apply plugin: 'com.android.library'
-apply from: "${rootDir}/gradle/common.gradle"
-apply from: "${rootDir}/gradle/publish.gradle"
+apply from: "${rootDir}/gradle/library.gradle"
 
 dependencies {
     // compileOnly表示只参与编译不参与打包
-    compileOnly 'com.orhanobut:logger:2.2.0'
-}
-
-android {
-
-    defaultConfig {
-        consumerProguardFiles 'consumer-rules.pro'
-    }
-
+    compileOnly library.logger
 }
