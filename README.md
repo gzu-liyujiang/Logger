@@ -1,10 +1,9 @@
 # Logger
 
 ![Release APK](https://github.com/gzu-liyujiang/Logger/workflows/Release%20APK/badge.svg)
-![Gradle Package](https://github.com/gzu-liyujiang/Logger/workflows/Gradle%20Package/badge.svg)
 [![jitpack](https://jitpack.io/v/gzu-liyujiang/Logger.svg)](https://jitpack.io/#gzu-liyujiang/Logger)
 
-自用的 Android/Java 日志打印组件，面向接口编程，默认实现了android.util.Log、System.out.println及https://github.com/orhanobut/logger
+自用的 Android/Java 日志打印组件，面向接口编程，使用接口对各模块进行解耦，增强对第三方库的管控，底层可无缝切换底层的具体实现。默认实现了android.util.Log、System.out.println及https://github.com/orhanobut/logger 。
 
 
 ```groovy

@@ -19,7 +19,7 @@ dependencies {
     implementation androidxLibrary.appcompat
     implementation library.material
     // runtimeOnly表示只参与打包不参与编译
-    runtimeOnly library.logger
+    debugRuntimeOnly library.logger
 }
 
 android {
