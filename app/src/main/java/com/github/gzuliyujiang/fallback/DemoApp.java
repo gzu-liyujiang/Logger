@@ -1,30 +1,30 @@
 /*
- * Copyright (c) 2019-2020 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2016-present 贵州纳雍穿青人李裕江<1032694760@qq.com>
  *
- * Logger is licensed under the Mulan PSL v1.
- * You can use this software according to the terms and conditions of the Mulan PSL v1.
- * You may obtain a copy of Mulan PSL v1 at:
- *     http://license.coscl.org.cn/MulanPSL
+ * The software is licensed under the Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ *     http://license.coscl.org.cn/MulanPSL2
  * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
  * PURPOSE.
- * See the Mulan PSL v1 for more details.
- *
+ * See the Mulan PSL v2 for more details.
  */
 
-package com.github.gzuliyujiang.demo;
+package com.github.gzuliyujiang.fallback;
 
 import android.app.Application;
 import android.content.Context;
 
+import androidx.multidex.MultiDex;
+
 import com.github.gzuliyujiang.logger.Logger;
 
 /**
- * Created by liyujiang on 2020/06/13 23:43
- *
- * @author 大定府羡民
+ * @author 贵州山野羡民（1032694760@qq.com）
+ * @since 2021/5/15 16:01
  */
-public class MyApp extends Application {
+public class DemoApp extends Application {
 
     static {
         if (BuildConfig.DEBUG) {
@@ -40,6 +40,7 @@ public class MyApp extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        MultiDex.install(this);
         Logger.print("Application attachBaseContext");
     }
 

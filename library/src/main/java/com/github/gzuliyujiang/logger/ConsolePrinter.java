@@ -1,15 +1,14 @@
 /*
- * Copyright (c) 2019-2020 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2016-present 贵州纳雍穿青人李裕江<1032694760@qq.com>
  *
- * Logger is licensed under the Mulan PSL v1.
- * You can use this software according to the terms and conditions of the Mulan PSL v1.
- * You may obtain a copy of Mulan PSL v1 at:
- *     http://license.coscl.org.cn/MulanPSL
+ * The software is licensed under the Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ *     http://license.coscl.org.cn/MulanPSL2
  * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
  * PURPOSE.
- * See the Mulan PSL v1 for more details.
- *
+ * See the Mulan PSL v2 for more details.
  */
 package com.github.gzuliyujiang.logger;
 
@@ -18,12 +17,15 @@ import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.PrettyFormatStrategy;
 
 /**
- * 使用该日志打印器需要在`app`的`build.gralde`里添加依赖`com.orhanobut:logger:latest.version`
- * Created by liyujiang on 2020-4-25
+ * 面向接口编程，使用接口对各模块进行解耦，增强对第三方库的管控，不强依赖某些三方库，使得三方库可自由搭配组装。
+ * <p>
+ * 使用该日志打印器需要在`app`的`build.gralde`里添加依赖`runtimeOnly 'com.orhanobut:logger:2.2.0'`
  *
  * @author 大定府羡民
+ * @since 2020/4/25
  */
 class ConsolePrinter implements IPrinter {
+    private static final String MESSAGE = "Please add dependency `runtimeOnly 'com.orhanobut:logger:xxx'` in your app/build.gradle";
     private final String tag;
 
     public ConsolePrinter(String tag) {
@@ -42,22 +44,21 @@ class ConsolePrinter implements IPrinter {
                 }
             });
         } catch (NoClassDefFoundError e) {
-            if (BuildConfig.DEBUG) {
-                android.util.Log.e(tag, "runtimeOnly 'com.orhanobut:logger:latest.version' in your app/build.gradle ?", e);
-            }
+            android.util.Log.e(tag, MESSAGE, e);
         }
     }
 
     @Override
     public void printLog(String log) {
         try {
+            Class.forName("com.orhanobut.logger.Logger");
             com.orhanobut.logger.Logger.w(log);
-        } catch (Throwable e) {
+        } catch (ClassNotFoundException | NoClassDefFoundError e) {
             try {
                 // Android平台专用的日志打印器
                 Class.forName("android.util.Log");
                 android.util.Log.w(tag, log);
-            } catch (ClassNotFoundException e1) {
+            } catch (ClassNotFoundException | NoClassDefFoundError e1) {
                 // Java平台通用的日志打印器
                 System.out.println("[" + tag + "]" + log);
             }
