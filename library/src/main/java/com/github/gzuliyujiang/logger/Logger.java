@@ -144,6 +144,9 @@ public final class Logger {
         } else {
             str = object.toString();
         }
+        if (str.length() > 10240) {
+            str = str.substring(0, 10240) + "...";
+        }
         return str;
     }
 
