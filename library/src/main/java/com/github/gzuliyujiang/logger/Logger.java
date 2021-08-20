@@ -21,7 +21,7 @@ import java.util.StringTokenizer;
  *
  * @author 大定府羡民
  */
-@SuppressWarnings({"WeakerAccess"})
+@SuppressWarnings({"WeakerAccess", "unused"})
 public final class Logger {
     public static final String TAG = "liyujiang";
     public static final String LINE_SEPARATOR = System.getProperty("line.separator");
@@ -54,16 +54,6 @@ public final class Logger {
         enableConsolePrinter(null);
     }
 
-    @Deprecated
-    public static void enableMainPrinter() {
-        enableConsolePrinter();
-    }
-
-    @Deprecated
-    public static void enableMainPrinter(String tag) {
-        enableConsolePrinter(tag);
-    }
-
     /**
      * @see ConsolePrinter
      */
@@ -74,21 +64,11 @@ public final class Logger {
         consolePrinter = iPrinter;
     }
 
-    @Deprecated
-    public static void setMainPrinter(IPrinter iPrinter) {
-        setConsolePrinter(iPrinter);
-    }
-
     /**
      * 禁用控制台日志打印器
      */
     public static void disableConsolePrinter() {
         consolePrinter = null;
-    }
-
-    @Deprecated
-    public static void disableMainPrinter() {
-        disableConsolePrinter();
     }
 
     /**
@@ -117,11 +97,14 @@ public final class Logger {
      * 打印调试日志，用于开发阶段
      */
     public static synchronized void print(Object object) {
+        String log = formatLog(object);
         if (consolePrinter != null) {
-            consolePrinter.printLog(formatLog(object));
+            if (log.length() > 512) {
+                log = log.substring(0, 512) + "...";
+            }
+            consolePrinter.printLog(log);
         }
         if (otherPrinters.size() > 0) {
-            String log = formatLog(object);
             for (IPrinter printer : otherPrinters) {
                 printer.printLog(log);
             }
@@ -143,9 +126,6 @@ public final class Logger {
             str = getStackTraceString((Throwable) object);
         } else {
             str = object.toString();
-        }
-        if (str.length() > 10240) {
-            str = str.substring(0, 10240) + "...";
         }
         return str;
     }
