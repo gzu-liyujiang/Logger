@@ -99,10 +99,13 @@ public final class Logger {
     public static synchronized void print(Object object) {
         String log = formatLog(object);
         if (consolePrinter != null) {
-            if (log.length() > 512) {
-                log = log.substring(0, 512) + "...";
+            String shortLog;
+            if (log.length() > 2048) {
+                shortLog = log.substring(0, 2048) + "...";
+            } else {
+                shortLog = log;
             }
-            consolePrinter.printLog(log);
+            consolePrinter.printLog(shortLog);
         }
         if (otherPrinters.size() > 0) {
             for (IPrinter printer : otherPrinters) {
